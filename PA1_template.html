@@ -466,7 +466,7 @@ ggplot(stepsinterval, aes(x=interval, y=steps))+ geom_line()</code></pre>
 
 nrow(rawdata) - nrow(datanoNA)</code></pre>
 <pre><code>## [1] 2304</code></pre>
-<pre class="r"><code>## New data set with no missing values
+<pre class="r"><code>## New data set with no missing values by replacing NAs with interval averages from other days
 
 imputeNA &lt;- rawdata %&gt;%
   mutate(steps = case_when(
@@ -499,6 +499,8 @@ imputeNA$Date &lt;- as.Date(imputeNA$date, format = &quot;%Y-%m-%d&quot;)
 imputeNA$weekday &lt;- weekdays(imputeNA$Date)
 imputeNA$Type &lt;- ifelse(imputeNA$weekday == &#39;Saturday&#39; | imputeNA$weekday == &#39;Sunday&#39;,
                         &#39;weekend&#39;, &#39;weekday&#39;)
+
+## Last plot depicting activity in weekdays and weekends
 
 imputedaytype &lt;- aggregate(steps~interval+Type,data=imputeNA,FUN=mean,na.action=na.omit)
 ggplot(imputedaytype, aes(interval, steps, colour = Type)) + geom_line() + ggtitle(&quot;Weekday and Weekend graphs&quot;) + facet_grid(Type ~ .) </code></pre>
